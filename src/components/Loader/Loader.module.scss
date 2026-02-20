@@ -1,0 +1,35 @@
+@use '@/shared/styles/variables' as *;
+
+.loader {
+  display: inline-block;
+  border-radius: 100%;
+  border-style: solid;
+  border-color: $loader-bg-color;
+  border-right-color: transparent !important;
+  animation: loader-spinner 0.8s linear infinite;
+  box-sizing: border-box;
+}
+
+@keyframes loader-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader_size-s {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.loader_size-m {
+  width: 48px;
+  height: 48px;
+  border-width: 4px;
+}
+
+.loader_size-l {
+  width: 60px;
+  height: 60px;
+  border-width: 6px;
+}

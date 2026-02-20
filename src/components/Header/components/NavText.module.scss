@@ -1,0 +1,11 @@
+@use '@/shared/styles/variables' as *;
+
+.link {
+  text-decoration: none;
+  color: currentColor;
+}
+
+.active {
+  color: $brand-color;
+  font-weight: 600;
+}

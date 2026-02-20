@@ -1,0 +1,25 @@
+@use './variables' as vars;
+
+@mixin mobile {
+  @media (min-width: #{vars.$mobile}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{vars.$tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{vars.$desktop}) {
+    @content;
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
