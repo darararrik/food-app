@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import styles from './Text.module.scss'
 
-export type TextProps = {
+export type TextProps = React.HTMLAttributes<HTMLElement> & {
   /** Дополнительный класс */
   className?: string
   /** Стиль отображения */
@@ -13,7 +13,7 @@ export type TextProps = {
   /** Начертание шрифта */
   weight?: 'normal' | 'medium' | 'bold'
   /** Контент */
-  children: React.ReactNode
+  children?: React.ReactNode
   /** Цвет */
   color?: 'primary' | 'secondary' | 'accent'
   /** Максимальное кол-во строк */
@@ -28,6 +28,7 @@ const Text: React.FC<TextProps> = ({
   children,
   color,
   maxLines,
+  ...props
 }) => {
   return (
     <Tag
@@ -39,6 +40,7 @@ const Text: React.FC<TextProps> = ({
         className,
       )}
       style={{ WebkitLineClamp: maxLines }}
+      {...props}
     >
       {children}
     </Tag>

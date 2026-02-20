@@ -1,0 +1,17 @@
+@use '@/shared/styles/variables' as *;
+.heroImage {
+  width: 448px;
+  border-radius: $border-radius;
+}
+.infoContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 100px;
+  row-gap: 50px;
+}
+.imageContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 166px;
+  align-items: center;
+}

@@ -10,19 +10,31 @@ export interface StrapiImage {
   }
 }
 
+export interface Equipment {
+  id: number
+  name: string
+}
+export interface Direction {
+  id: number
+  description: string
+  image: StrapiImage
+}
 export interface Recipe {
   id: number
   documentId: string
   name: string
   summary: string
-  images?: StrapiImage[]
+  images: StrapiImage[]
   totalTime: number
   cookingTime: number
   preparationTime: number
   servings: number
   rating: number
   calories: number
+  likes: number
   ingradients: Ingradient[]
+  equipments: Equipment[]
+  directions: Direction[]
 }
 
 export interface StrapiResponse<T> {

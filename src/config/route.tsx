@@ -1,11 +1,11 @@
-import type { RouteObject } from "react-router";
-import App from "../App/App";
-import RecipesPage from "../pages/RecipesPage/RecipesPage";
-import RecipeDetailPage from "../pages/RecipeDetailPage/RecipeDetailPage";
+import type { RouteObject } from 'react-router'
+import App from '../App/App'
+import RecipesPage from '../pages/RecipesPage/RecipesPage'
+import RecipeDetailPage from '../pages/RecipeDetailPage/RecipeDetailPage'
 
 export const routesConfig: RouteObject[] = [
   {
-    path: "/",
+    path: '/',
     element: <App />,
     children: [
       {
@@ -13,13 +13,9 @@ export const routesConfig: RouteObject[] = [
         element: <RecipesPage />,
       },
       {
-        path: "recipes",
-        element: <RecipesPage />,
-      },
-      {
-        path: "recipes/:id",
+        path: 'recipes/:id',
         element: <RecipeDetailPage />,
       },
     ],
   },
-];
+]

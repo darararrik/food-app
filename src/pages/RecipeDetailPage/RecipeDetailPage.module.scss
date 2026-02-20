@@ -1,0 +1,31 @@
+@use '@/shared/styles/variables' as *;
+.main {
+  padding: 0 100px;
+  margin: 49px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  gap: floor($number: 0);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 37px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.summaryContainer {
+  background-color: #b5460f54;
+  padding: 36px;
+  border-radius: $border-radius;
+}

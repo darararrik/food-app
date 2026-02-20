@@ -1,7 +1,6 @@
 import classNames from 'classnames'
-import arrowLeft from '@/assets/arrow-left.svg'
-import arrowRight from '@/assets/arrow-right.svg'
 import styles from './Pagination.module.scss'
+import ArrowButton from './components/ArrowButton'
 
 type PaginationProps = {
   currentPage: number
@@ -16,13 +15,11 @@ const Pagination: React.FC<PaginationProps> = ({
 }: PaginationProps) => {
   return (
     <div className={styles.pagination}>
-      <button
-        className={styles.arrowButton}
+      <ArrowButton
+        direction="left"
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-      >
-        <img src={arrowLeft} alt="Previous" />
-      </button>
+      />
 
       {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
         <button
@@ -36,13 +33,11 @@ const Pagination: React.FC<PaginationProps> = ({
         </button>
       ))}
 
-      <button
-        className={styles.arrowButton}
+      <ArrowButton
+        direction="right"
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-      >
-        <img src={arrowRight} alt="Next" />
-      </button>
+      />
     </div>
   )
 }

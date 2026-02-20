@@ -1,58 +1,54 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router";
-import { getRecipeById } from "@/shared/api/recipe";
-import type { Recipe } from "@/shared/types/recipe";
-import styles from "./RecipeDetailPage.module.scss";
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+import { getRecipeById } from '@/shared/api/recipe'
+import type { Recipe } from '@/shared/types/recipe'
+import styles from './RecipeDetailPage.module.scss'
+import Text from '@/components/Text'
+import ArrowButton from '@/components/Pagination/components/ArrowButton'
+import HeroImage from './components/HeroImage'
+import IngredientsAndEquipment from './components/IngredientsAndEquipment'
+import Directions from './components/Directions/Directions'
 
 const RecipeDetailPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { id } = useParams<{ id: string }>()
+  const [recipe, setRecipe] = useState<Recipe | null>(null)
 
   useEffect(() => {
     if (id) {
       getRecipeById(id)
         .then((response) => {
-          setRecipe(response.data);
+          setRecipe(response.data)
         })
         .catch((err) => {
-          setError(err.message);
+          console.log(err.message)
         })
-        .finally(() => {
-          setLoading(false);
-        });
     }
-  }, [id]);
+  }, [id])
 
-  if (loading) return <div className={styles.loading}>Загрузка рецепта...</div>;
-  if (error) return <div className={styles.error}>Ошибка: {error}</div>;
-  if (!recipe) return <div className={styles.error}>Рецепт не найден</div>;
+  if (!recipe) return <div className={styles.error}>Рецепт не найден</div>
 
   return (
-    <div className={styles.container}>
-      <Link to="/recipes" className={styles.backLink}>
-        ← К списку рецептов
-      </Link>
-
-      <div className={styles.content}>
-        {recipe.images?.[0] && (
-          <img
-            src={recipe.images[0].url}
-            alt={recipe.title}
-            className={styles.mainImage}
+    <div className={styles.main}>
+      <section className={styles.heroContent}>
+        <div className={styles.header}>
+          <ArrowButton
+            className={styles.arrowButton}
+            direction="left"
+            onClick={() => window.history.back()}
           />
-        )}
-
-        <div className={styles.info}>
-          <h1 className={styles.title}>{recipe.title}</h1>
-          <p className={styles.description}>{recipe.description}</p>
-
-          {/* Здесь можно добавить отображение ингредиентов и т.д. */}
+          <Text view="title">{recipe.name}</Text>
         </div>
-      </div>
+        <HeroImage recipe={recipe} />
+      </section>
+      <section className={styles.content}>
+        <div className={styles.summaryContainer}>
+          <Text view="p-16" dangerouslySetInnerHTML={{ __html: recipe.summary }} />
+        </div>
+        <IngredientsAndEquipment recipe={recipe} />
+        <Directions direction={recipe.directions} />
+      </section>
     </div>
-  );
-};
+  )
+}
 
-export default RecipeDetailPage;
+export default RecipeDetailPage
