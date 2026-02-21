@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { getRecipeById } from '@/shared/api/recipe'
+import { RecipeApi } from '@/shared/api/recipe'
 import type { Recipe } from '@/shared/types/recipe'
 import styles from './RecipeDetailPage.module.scss'
 import Text from '@/components/Text'
@@ -15,7 +15,7 @@ const RecipeDetailPage = () => {
 
   useEffect(() => {
     if (id) {
-      getRecipeById(id)
+      RecipeApi.getRecipeById(id)
         .then((response) => {
           setRecipe(response.data)
         })

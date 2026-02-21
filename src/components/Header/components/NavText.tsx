@@ -11,7 +11,7 @@ const NavText: React.FC<NavTextProps> = ({ to, text }) => {
   return (
     <NavLink to={to} className={styles.link}>
       {({ isActive }) => (
-        <Text view="p-16" className={isActive ? styles.active : ''}>
+        <Text view="p-16" className={isActive ? '' : styles.active}>
           {text}
         </Text>
       )}

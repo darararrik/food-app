@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getRecipes } from '@/shared/api/recipe'
+import { RecipeApi } from '@/shared/api/recipe'
 import type { Recipe } from '@/shared/types/recipe'
 import styles from './RecipesPage.module.scss'
 import Text from '@/components/Text'
@@ -14,7 +14,7 @@ const RecipesPage = () => {
   const [totalPages, setTotalPages] = useState(1)
 
   useEffect(() => {
-    getRecipes(currentPage)
+    RecipeApi.getRecipes(currentPage)
       .then((response) => {
         setRecipes(response.data)
         setTotalPages(response.meta.pagination.pageCount)

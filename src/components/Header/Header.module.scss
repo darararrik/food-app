@@ -52,8 +52,15 @@
   align-items: center;
   gap: 16px;
 
-  a {
-    @include mix.flex-center; // Центрирует содержимое ссылки (иконку/текст)
+  a,
+  .actionIcon {
+    @include mix.flex-center;
     color: $brand-color;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }
