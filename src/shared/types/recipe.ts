@@ -37,6 +37,13 @@ export interface Recipe {
   directions: Direction[]
 }
 
+export interface Favorite {
+  id: number
+  documentId: string
+  originalRecipeId: number
+  recipe: Recipe
+}
+
 export interface StrapiResponse<T> {
   data: T
   meta: {

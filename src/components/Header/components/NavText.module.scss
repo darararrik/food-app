@@ -2,10 +2,15 @@
 
 .link {
   text-decoration: none;
-  color: currentColor;
+  color: $text-primary-color;
+  transition: color 0.2s;
+
+  &:hover p {
+    color: $brand-color;
+  }
 }
 
-.active {
+.active p {
   color: $brand-color;
   font-weight: 600;
 }

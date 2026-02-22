@@ -5,24 +5,38 @@ import styles from './RecipesPage.module.scss'
 import Text from '@/components/Text'
 import heroRecipesText from '@/assets/hero-recipes.svg'
 import Search from './components/Search'
-import RecipeCard from './components/RecipeCard'
+import RecipeCard from '../../components/RecipeCard'
 import Pagination from '@/components/Pagination/Pagination'
 
 const RecipesPage = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    RecipeApi.getRecipes(currentPage)
-      .then((response) => {
-        setRecipes(response.data)
-        setTotalPages(response.meta.pagination.pageCount)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [currentPage])
+    if (searchQuery) {
+      RecipeApi.findRecipeByName(searchQuery)
+        .then((response) => {
+          setRecipes(response.data)
+          // findRecipeByName currently doesn't have pagination, so set to 1
+          setTotalPages(1)
+        })
+        .catch(console.error)
+    } else {
+      RecipeApi.getRecipes(currentPage)
+        .then((response) => {
+          setRecipes(response.data)
+          setTotalPages(response.meta.pagination.pageCount)
+        })
+        .catch(console.error)
+    }
+  }, [currentPage, searchQuery])
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value)
+    setCurrentPage(1)
+  }
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
@@ -47,7 +61,7 @@ const RecipesPage = () => {
           </div>
         </section>
         <section className={styles.searchSection}>
-          <Search></Search>
+          <Search onSearch={handleSearch} />
         </section>
         <section className={styles.recipesSection}>
           {recipes.map((recipe) => (

@@ -1,11 +1,15 @@
-import { useState } from 'react' // 1. Импортируем useState
+import { useState } from 'react'
 import Button from '@/components/Button'
 import SearchIcon from '@/components/icons/SearchIcon'
 import Input from '@/components/Input'
 import styles from './Search.module.scss'
 import MultiDropdown, { type Option } from '@/components/MultiDropdown'
 
-const Search = () => {
+export type SearchProps = {
+  onSearch: (value: string) => void
+}
+
+const Search: React.FC<SearchProps> = ({ onSearch }) => {
   const [searchValue, setSearchValue] = useState('')
   const [selectedOptions, setSelectedOptions] = useState<Option[]>([])
 
@@ -16,8 +20,13 @@ const Search = () => {
           placeholder="Enter dishes"
           value={searchValue}
           onChange={(value) => setSearchValue(value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              onSearch(searchValue)
+            }
+          }}
         />
-        <Button>
+        <Button onClick={() => onSearch(searchValue)}>
           <SearchIcon />
         </Button>
       </div>

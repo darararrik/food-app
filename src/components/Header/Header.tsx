@@ -20,12 +20,13 @@ const Header = () => {
         </Link>
         <nav className={styles.nav}>
           <div className={styles.links}>
-            <NavText to="/recipes" text="Recipes" />
-            <NavText to="/" text="Meals Categories" />
-            <NavText to="/" text="Products" />
-            <NavText to="/" text="Menu Items" />
-            <NavText to="/" text="Planning" />
+            <NavText to="/" text="Recipes" />
+            <NavText to="/favorites" text="Favorites" />
+            <NavText to="/products" text="Products" />
+            <NavText to="/menu-items" text="Menu Items" />
+            <NavText to="/planning" text="Planning" />
           </div>
+
           <div className={styles.actions}>
             <Link to="/favorites">
               <FavoriteIcon width={20} height={20} />

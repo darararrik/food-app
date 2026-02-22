@@ -1,0 +1,29 @@
+@use '@/shared/styles/mixins' as mix;
+.recipesSection {
+  display: grid;
+  row-gap: 64px;
+  column-gap: 80px;
+  margin-bottom: 200px;
+  margin-top: 64px;
+  grid-template-columns: 1fr;
+
+  @include mix.mobile {
+    padding: 0 20px;
+  }
+  @include mix.tablet {
+    padding: 0 40px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include mix.desktop {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 100px;
+  }
+}
+
+.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  opacity: 0.5;
+}

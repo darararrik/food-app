@@ -35,7 +35,6 @@ export const useLoginModal = (onClose: () => void) => {
     try {
       let response
       if (isLogin) {
-        // В Strapi identifier может быть username или email
         response = await authApi.login(username, password)
       } else {
         response = await authApi.register(username, email, password)

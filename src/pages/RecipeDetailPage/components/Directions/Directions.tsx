@@ -7,7 +7,6 @@ type DirectionsProps = {
 }
 
 const Directions: React.FC<DirectionsProps> = ({ direction }) => {
-  console.log(direction)
   return (
     <div className={styles.directionsContainer}>
       {direction.map((item, index) => (
