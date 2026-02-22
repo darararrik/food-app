@@ -1,25 +1,70 @@
 @use './variables' as vars;
 
-@mixin mobile {
-  @media (min-width: #{vars.$mobile}) {
-    @content;
-  }
-}
-
-@mixin tablet {
-  @media (min-width: #{vars.$tablet}) {
-    @content;
-  }
-}
-
-@mixin desktop {
-  @media (min-width: #{vars.$desktop}) {
-    @content;
-  }
-}
-
+// Центрация контента (как было)
 @mixin flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+// ==== СТАРЫЕ МИКСИНЫ (для обратной совместимости, пока не перепишешь всё) ====
+@mixin mobile {
+  @media (min-width: 375px) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media (min-width: 1440px) {
+    @content;
+  }
+}
+
+// ======== АДАПТИВНОСТЬ (НОВЫЙ ПАТТЕРН) ========
+
+// Миксин для работы "максимум до ширины X" (до планшета, до мобильного и т.д.)
+@mixin respond($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: #{vars.$breakpoint-sm}) {
+      @content;
+    }
+  }
+  @if $breakpoint == md {
+    @media (max-width: #{vars.$breakpoint-md}) {
+      @content;
+    }
+  }
+  @if $breakpoint == lg {
+    @media (max-width: #{vars.$breakpoint-lg}) {
+      @content;
+    }
+  }
+  @if $breakpoint == xl {
+    @media (max-width: #{vars.$breakpoint-xl}) {
+      @content;
+    }
+  }
+}
+
+// Строгие диапазоны экранов
+@mixin mobile-only {
+  @media (max-width: #{vars.$breakpoint-md}) {
+    @content;
+  }
+}
+
+@mixin tablet-only {
+  @media (min-width: calc(#{vars.$breakpoint-md} + 1px)) and (max-width: #{vars.$breakpoint-lg}) {
+    @content;
+  }
+}
+
+@mixin desktop-only {
+  @media (min-width: calc(#{vars.$breakpoint-lg} + 1px)) {
+    @content;
+  }
 }

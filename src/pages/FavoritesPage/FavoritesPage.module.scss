@@ -1,22 +1,31 @@
 @use '@/shared/styles/mixins' as mix;
+.favoritesPage {
+  margin-top: 49px;
+  padding: 0 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 37px;
+
+  @include mix.respond(lg) {
+    padding: 0 64px;
+  }
+  @include mix.respond(md) {
+    padding: 0 24px;
+  }
+}
 .recipesSection {
   display: grid;
   row-gap: 64px;
   column-gap: 80px;
   margin-bottom: 200px;
-  margin-top: 64px;
   grid-template-columns: 1fr;
+  grid-template-columns: repeat(3, 1fr);
 
-  @include mix.mobile {
-    padding: 0 20px;
-  }
-  @include mix.tablet {
-    padding: 0 40px;
+  @include mix.respond(lg) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @include mix.desktop {
-    grid-template-columns: repeat(3, 1fr);
-    padding: 0 100px;
+  @include mix.respond(md) {
+    grid-template-columns: 1fr;
   }
 }
 

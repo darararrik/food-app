@@ -1,9 +1,18 @@
 @use '@/shared/styles/variables' as *;
+@use '@/shared/styles/mixins' as mix;
 
 .ingredientsAndEquipmentContainer {
   display: flex;
   flex-direction: row;
   gap: 100px;
+
+  @include mix.respond(lg) {
+    gap: 64px;
+  }
+  @include mix.respond(md) {
+    flex-direction: column;
+    gap: 32px;
+  }
 }
 
 .ingredientsContainer,
@@ -23,6 +32,10 @@
   grid-template-columns: repeat(2, 1fr);
   row-gap: 8px;
   column-gap: 30px;
+
+  @include mix.respond(md) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .ingredient,
@@ -42,7 +55,12 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+
+  @include mix.respond(md) {
+    display: none;
+  }
 }
+
 .divider {
   width: 1px;
   height: 100%;

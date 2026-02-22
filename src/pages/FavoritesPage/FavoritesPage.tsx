@@ -29,6 +29,7 @@ const FavoritesPage = () => {
 
   return (
     <div className={styles.favoritesPage}>
+      <Text view="title">Favorites</Text>
       <section className={styles.recipesSection}>
         {recipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} isFavorite />

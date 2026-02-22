@@ -18,14 +18,12 @@
   gap: 48px;
   display: flex;
   flex-direction: column;
-  @include mix.mobile {
-    padding: 0 20px;
+  padding: 0 100px;
+  @include mix.respond(lg) {
+    padding: 0 64px;
   }
-  @include mix.tablet {
-    padding: 0 40px;
-  }
-  @include mix.desktop {
-    padding: 0 100px;
+  @include mix.respond(md) {
+    padding: 0 24px;
   }
 }
 .heroOverlay {
@@ -51,15 +49,15 @@
 }
 .recipesSection {
   display: grid;
+  grid-template-columns: repeat(3, 1fr);
   row-gap: 64px;
   column-gap: 80px;
 
-  grid-template-columns: 1fr;
-  @include mix.tablet {
+  @include mix.respond(lg) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @include mix.desktop {
-    grid-template-columns: repeat(3, 1fr);
+  @include mix.respond(md) {
+    grid-template-columns: 1fr;
   }
 }
 .paginationSection {
