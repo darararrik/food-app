@@ -19,7 +19,6 @@ const RecipesPage = () => {
       RecipeApi.findRecipeByName(searchQuery)
         .then((response) => {
           setRecipes(response.data)
-          // findRecipeByName currently doesn't have pagination, so set to 1
           setTotalPages(1)
         })
         .catch(console.error)

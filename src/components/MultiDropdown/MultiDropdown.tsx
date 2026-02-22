@@ -42,7 +42,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
         setIsOpen(false)
-        setFilter('') // Reset filter when closing
+        setFilter('')
       }
     }
 

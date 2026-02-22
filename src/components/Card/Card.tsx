@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import React from 'react'
-import Text from '../Text' // Импортируем твой компонент Text
+import Text from '../Text'
 import styles from './Card.module.scss'
 
 export type CardProps = {
