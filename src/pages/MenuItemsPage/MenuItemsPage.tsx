@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router'
-import { withAuth } from '@/shared/hoc/withAuth'
+import { withAuth } from '@/hoc/withAuth'
 
 const MenuItemsPage = () => {
   return <Navigate to="/" replace />

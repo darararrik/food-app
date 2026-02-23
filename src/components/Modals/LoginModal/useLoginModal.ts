@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import authApi from '@/shared/api/auth'
+import authApi from '@/api/auth'
 
 export const useLoginModal = (onClose: () => void) => {
   const [isLogin, setIsLogin] = useState(true)

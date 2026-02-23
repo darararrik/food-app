@@ -1,4 +1,4 @@
-import type { Recipe } from '@/shared/types/recipe'
+import type { Recipe } from '@/types/recipe'
 import Infotext from '../InfoText'
 import styles from './HeroImage.module.scss'
 type HeroImageProps = {

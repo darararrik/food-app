@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { RecipeApi } from '@/shared/api/recipe'
-import type { Recipe } from '@/shared/types/recipe'
+import { RecipeApi } from '@/api/recipe'
+import type { Recipe } from '@/types/recipe'
 import styles from './RecipesPage.module.scss'
 import Text from '@/components/Text'
 import heroRecipesText from '@/assets/hero-recipes.svg'

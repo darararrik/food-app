@@ -1,4 +1,4 @@
-import type { Direction } from '@/shared/types/recipe'
+import type { Direction } from '@/types/recipe'
 import Text from '@/components/Text'
 import styles from './Directions.module.scss'
 
