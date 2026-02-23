@@ -7,13 +7,15 @@ interface NavTextProps {
   to: string
   text: string
   end?: boolean
+  onClick?: () => void
 }
 
-const NavText: React.FC<NavTextProps> = ({ to, text, end }) => {
+const NavText: React.FC<NavTextProps> = ({ to, text, end, onClick }) => {
   return (
     <NavLink
       to={to}
       end={end}
+      onClick={onClick}
       className={({ isActive }) => classNames(styles.link, { [styles.active]: isActive })}
     >
       <Text view="p-16">{text}</Text>

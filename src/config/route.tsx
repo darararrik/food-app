@@ -1,16 +1,16 @@
 import type { RouteObject } from 'react-router'
-import App from '@/App/App'
 import RecipesPage from '@/pages/RecipesPage'
 import FavoritesPage from '@/pages/FavoritesPage'
 import RecipeDetailPage from '@/pages/RecipeDetailPage'
 import ProductsPage from '@/pages/ProductsPage'
 import MenuItemsPage from '@/pages/MenuItemsPage'
 import PlanningPage from '@/pages/PlanningPage'
+import MainLayout from '@/components/MainLayout/MainLayout'
 
 export const routesConfig: RouteObject[] = [
   {
     path: '/',
-    element: <App />,
+    element: <MainLayout />,
     children: [
       {
         index: true,

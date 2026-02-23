@@ -1,4 +1,5 @@
 @use '@/shared/styles/variables' as *;
+@use '@/shared/styles/mixins' as mix;
 
 .overlay {
   position: fixed;
@@ -16,9 +17,14 @@
   padding: 32px;
   border-radius: $border-radius;
   position: relative;
-  min-width: 320px;
-  max-width: 90%;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  @include mix.respond(xl) {
+    width: 400px;
+  }
+  @include mix.respond(sm) {
+    width: 320px;
+  }
 }
 
 .closeButton {

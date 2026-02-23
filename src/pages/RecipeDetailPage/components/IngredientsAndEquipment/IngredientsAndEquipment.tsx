@@ -19,7 +19,7 @@ const IngredientsAndEquipment: React.FC<IngredientsAndEquipmentProps> = ({ recip
           {recipe.ingradients?.map((ingredient) => (
             <div key={ingredient.id} className={styles.ingredient}>
               <img src={ingIcon} alt="ingredient" className={styles.icon} />
-              <Text view="p-16">{ingredient.name}</Text>
+              <Text view="p-16">{`${ingredient.amount} ${ingredient.name}`}</Text>
             </div>
           ))}
         </div>

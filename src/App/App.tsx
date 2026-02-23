@@ -1,17 +1,11 @@
-import { Outlet } from "react-router";
+import { RouterProvider, createBrowserRouter } from 'react-router'
+import { routesConfig } from '@/config/route'
+import './App.module.scss'
 
-import styles from "./App.module.scss";
-import Header from "@/components/Header";
+const router = createBrowserRouter(routesConfig)
 
-function App() {
-  return (
-    <div className={styles.app}>
-      <Header />
-      <div className={styles.content}>
-        <Outlet />
-      </div>
-    </div>
-  );
+const App = () => {
+  return <RouterProvider router={router} />
 }
 
-export default App;
+export default App

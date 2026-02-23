@@ -1,35 +1,26 @@
 @use './variables' as vars;
-
-// Центрация контента (как было)
+@use 'sass:map';
 @mixin flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-@mixin respond($breakpoint) {
-  @if $breakpoint == sm {
-    @media (max-width: #{vars.$breakpoint-sm}) {
-      @content;
-    }
-  }
-  @if $breakpoint == md {
-    @media (max-width: #{vars.$breakpoint-md}) {
-      @content;
-    }
-  }
-  @if $breakpoint == lg {
-    @media (max-width: #{vars.$breakpoint-lg}) {
-      @content;
-    }
-  }
-  @if $breakpoint == xl {
-    @media (max-width: #{vars.$breakpoint-xl}) {
-      @content;
-    }
-  }
+@mixin font-family($weight: 500) {
+  font-family: $font-family;
+  font-weight: $weight;
 }
 
+@mixin respond($breakpoint) {
+  @if map.has-key(vars.$breakpoints, $breakpoint) {
+    $value: map.get(vars.$breakpoints, $breakpoint);
+
+    @media (max-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}.";
+  }
+}
 @mixin mobile-only {
   @media (max-width: #{vars.$breakpoint-md}) {
     @content;
@@ -46,4 +37,8 @@
   @media (min-width: calc(#{vars.$breakpoint-lg} + 1px)) {
     @content;
   }
+}
+@mixin square($size) {
+  width: $size;
+  height: $size;
 }

@@ -2,15 +2,17 @@ import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { RecipeApi } from '@/shared/api/recipe'
 import type { Recipe } from '@/shared/types/recipe'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { NavLink } from 'react-router'
+import TimerIcon from '../icons/TimerIcon'
+import React from 'react'
 
 export type RecipeCardProps = {
   recipe: Recipe
   isFavorite?: boolean
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = false }) => {
+const RecipeCard: React.FC<RecipeCardProps> = React.memo(({ recipe, isFavorite = false }) => {
   const [isFav, setIsFavorite] = useState(isFavorite)
   const formats = recipe.images?.[0]?.formats
   const imageUrl =
@@ -19,38 +21,39 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, isFavorite = false }) =
     formats?.large?.url ||
     formats?.thumbnail?.url ||
     ''
+  const handleFavoriteClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      e.preventDefault()
 
+      const apiCall = isFav
+        ? RecipeApi.deleteRecipe(recipe.documentId)
+        : RecipeApi.saveRecipe(recipe.documentId)
+
+      apiCall
+        .then(() => {
+          setIsFavorite((prev) => !prev)
+        })
+        .catch((err) => console.error(err))
+    },
+    [isFav, recipe.documentId],
+  )
   return (
     <NavLink to={`/recipes/${recipe.documentId}`}>
       <Card
         title={recipe.name}
         subtitle={recipe.ingradients?.map((i) => i.name).join(' + ') || ''}
         image={imageUrl}
-        captionSlot={recipe.totalTime}
-        actionSlot={
-          <Button
-            onClick={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-              if (isFav) {
-                RecipeApi.deleteRecipe(recipe.documentId).then((r) => {
-                  console.log(r)
-                  setIsFavorite(false)
-                })
-              } else {
-                RecipeApi.saveRecipe(recipe.documentId).then((r) => {
-                  console.log(r)
-                  setIsFavorite(true)
-                })
-              }
-            }}
-          >
-            {isFav ? 'Remove' : 'Save'}
-          </Button>
+        captionSlot={
+          <React.Fragment>
+            <TimerIcon />
+            {`${recipe.cookingTime} minutes`}
+          </React.Fragment>
         }
+        actionSlot={<Button onClick={handleFavoriteClick}>{isFav ? 'Remove' : 'Save'}</Button>}
         contentSlot={`${recipe.calories} kcal`}
       />
     </NavLink>
   )
-}
+})
 export default RecipeCard

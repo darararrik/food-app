@@ -15,3 +15,8 @@
     opacity: 0.2;
   }
 }
+.arrowButton_direction-left {
+  .icon {
+    transform: rotate(180deg);
+  }
+}

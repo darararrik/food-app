@@ -18,7 +18,6 @@
   row-gap: 64px;
   column-gap: 80px;
   margin-bottom: 200px;
-  grid-template-columns: 1fr;
   grid-template-columns: repeat(3, 1fr);
 
   @include mix.respond(lg) {

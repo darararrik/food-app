@@ -1,9 +1,9 @@
-import Modal from '../../Modal'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
 import Text from '@/components/Text'
 import styles from './LoginModal.module.scss'
 import { useLoginModal } from './useLoginModal'
+import BaseModal from '../BaseModal'
 
 type LoginModalProps = {
   isOpen: boolean
@@ -26,7 +26,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   } = useLoginModal(onClose)
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <BaseModal isOpen={isOpen} onClose={onClose}>
       <div className={styles.loginModal}>
         <Text view="title" className={styles.title}>
           {isLogin ? 'Login' : 'Sign Up'}
@@ -65,7 +65,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           </Text>
         </div>
       </div>
-    </Modal>
+    </BaseModal>
   )
 }
 

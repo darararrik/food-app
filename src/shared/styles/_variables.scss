@@ -1,4 +1,8 @@
-@use './Roboto/fonts';
+@use '@/shared/static/Roboto/fonts';
+
+:root {
+  --loader-color: $brand-color;
+}
 
 $brand-color: #b5460f;
 $brand-hover-color: #b5460fb2;
@@ -14,13 +18,16 @@ $button-primary-text-disabled-color: #ffffff;
 $button-primary-bg-active-color: $brand-active-color;
 
 $text-primary-color: #000000;
-$text-secondary-color: #00000073;
-$font-family: 'Roboto';
+$text-secondary-color: #afadb5;
+$error-text-color: #ff4d4f;
+$font-family: 'Roboto', sans-serif;
 
-$breakpoint-sm: 375px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1440px;
+$breakpoints: (
+  'sm': 375px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1440px,
+);
 // Spacing
 $space-xl: 24px;
 $space-l: 20px;

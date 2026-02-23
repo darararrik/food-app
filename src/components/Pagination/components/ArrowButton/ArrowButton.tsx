@@ -1,7 +1,6 @@
-import arrowLeft from '@/assets/arrow-left.svg'
-import arrowRight from '@/assets/arrow-right.svg'
-import styles from './ArrowButton.module.scss'
 import classNames from 'classnames'
+import styles from './ArrowButton.module.scss'
+import ArrowIcon from '@/components/icons/ArrowIcon'
 
 type ArrowButtonProps = {
   direction: 'left' | 'right'
@@ -11,16 +10,18 @@ type ArrowButtonProps = {
 }
 
 const ArrowButton: React.FC<ArrowButtonProps> = ({ direction, onClick, disabled, className }) => {
-  const icon = direction === 'left' ? arrowLeft : arrowRight
-  const altText = direction === 'left' ? 'Previous' : 'Next'
-
   return (
     <button
-      className={classNames(styles.arrowButton, className)}
+      className={classNames(
+        styles.arrowButton,
+        styles[`arrowButton_direction-${direction}`],
+        className,
+      )}
       onClick={onClick}
       disabled={disabled}
+      type="button"
     >
-      <img src={icon} alt={altText} />
+      <ArrowIcon className={styles.icon} />
     </button>
   )
 }
