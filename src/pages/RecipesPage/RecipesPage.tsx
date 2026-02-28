@@ -5,7 +5,7 @@ import styles from './RecipesPage.module.scss'
 import Text from '@/components/Text'
 import heroRecipesText from '@/assets/hero-recipes.svg'
 import Search from './components/Search'
-import RecipeCard from '../../components/RecipeCard'
+import RecipeCard from '../../components/Cards/RecipeCard'
 import Pagination from '@/components/Pagination/Pagination'
 
 const RecipesPage = () => {

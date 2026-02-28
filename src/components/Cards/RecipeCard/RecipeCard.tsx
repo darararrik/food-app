@@ -1,11 +1,11 @@
 import Button from '@/components/Button'
-import Card from '@/components/Card'
 import { RecipeApi } from '@/api/recipe'
 import type { Recipe } from '@/types/recipe'
 import { useCallback, useState } from 'react'
 import { NavLink } from 'react-router'
-import TimerIcon from '../icons/TimerIcon'
+import TimerIcon from '@/components/icons/TimerIcon'
 import React from 'react'
+import Card from '../Card'
 
 export type RecipeCardProps = {
   recipe: Recipe

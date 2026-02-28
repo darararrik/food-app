@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { withAuth } from '@/hoc/withAuth'
 import { RecipeApi } from '@/api/recipe'
 import type { Recipe } from '@/types/recipe'
-import RecipeCard from '@/components/RecipeCard'
+import RecipeCard from '@/components/Cards/RecipeCard'
 import Text from '@/components/Text'
 import styles from './FavoritesPage.module.scss'
 
