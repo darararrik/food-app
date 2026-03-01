@@ -71,13 +71,20 @@ export class RecipesStore implements ILocalStore {
   }
 
   setSearchQuery(query: string) {
-    this._searchQuery = query
-    this._currentPage = 1
+    if (this._searchQuery !== query) {
+      this._searchQuery = query
+      this._currentPage = 1
+    }
   }
 
   setSelectedOptions(options: Option[]) {
-    this._selectedOptions = options
-    this._currentPage = 1
+    const currentKeys = this._selectedOptions.map((o) => o.key).join(',')
+    const newKeys = options.map((o) => o.key).join(',')
+
+    if (currentKeys !== newKeys) {
+      this._selectedOptions = options
+      this._currentPage = 1
+    }
   }
 
   setCurrentPage(page: number) {

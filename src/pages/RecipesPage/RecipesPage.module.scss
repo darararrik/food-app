@@ -38,6 +38,9 @@
   padding-bottom: 20px;
   height: auto;
   margin-left: 40px;
+  @include mix.respond(lg) {
+    margin-left: 0;
+  }
 }
 
 .descriptionSection {
