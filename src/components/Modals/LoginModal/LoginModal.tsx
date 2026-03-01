@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite'
 import Input from '@/components/Input'
 import Button from '@/components/Button'
 import Text from '@/components/Text'
@@ -10,7 +11,7 @@ type LoginModalProps = {
   onClose: () => void
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
+const LoginModal: React.FC<LoginModalProps> = observer(({ isOpen, onClose }) => {
   const {
     isLogin,
     email,
@@ -67,6 +68,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       </div>
     </BaseModal>
   )
-}
+})
 
 export default LoginModal

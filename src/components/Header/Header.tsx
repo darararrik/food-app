@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
+import { observer } from 'mobx-react-lite'
+import { useStore } from '@/store/StoreContext'
 import styles from './Header.module.scss'
 import logo from '@/assets/logo.svg'
 import Text from '@/components/Text/Text'
@@ -11,11 +13,22 @@ import MenuIcon from '@/components/icons/MenuIcon'
 import FavoriteIcon from '../icons/FavoriteIcon'
 import UserIcon from '../icons/UserIcon'
 
-const Header = () => {
+const Header = observer(() => {
+  const { user: userStore } = useStore()
   const [isLoginModalOpen, setLoginModalOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+
+  const handleUserClick = () => {
+    if (userStore.isAuthenticated) {
+      if (confirm('Are you sure you want to log out?')) {
+        userStore.logout()
+      }
+    } else {
+      setLoginModalOpen(true)
+    }
+  }
 
   return (
     <header className={styles.header}>
@@ -54,13 +67,18 @@ const Header = () => {
           <Link to="/favorites">
             <FavoriteIcon width={20} height={20} />
           </Link>
-          <div className={styles.actionIcon} onClick={() => setLoginModalOpen(true)}>
-            <UserIcon />
+          <div
+            className={classNames(styles.actionIcon, {
+              [styles.authenticated]: userStore.isAuthenticated,
+            })}
+            onClick={handleUserClick}
+          >
+            <UserIcon color={userStore.isAuthenticated ? 'primary' : 'accent'} />
           </div>
         </div>
       </div>
       <LoginModal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)} />
     </header>
   )
-}
+})
 export default Header

@@ -1,44 +1,34 @@
-import { useEffect, useState } from 'react'
-import { RecipeApi } from '@/api/recipe'
-import type { Recipe } from '@/types/recipe'
+import { useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
 import styles from './RecipesPage.module.scss'
 import Text from '@/components/Text'
 import heroRecipesText from '@/assets/hero-recipes.svg'
 import Search from './components/Search'
-import RecipeCard from '../../components/Cards/RecipeCard'
+import RecipeCard from '@/components/Cards/RecipeCard'
+import RecipeCardSkeleton from '@/components/Cards/RecipeCard/RecipeCardSkeleton'
 import Pagination from '@/components/Pagination/Pagination'
+import { useRecipesSearchParams } from '@/shared/hooks/useRecipesSearchParams'
+import { useStore } from '@/store/StoreContext'
+import type { Option } from '@/components/MultiDropdown'
 
-const RecipesPage = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [searchQuery, setSearchQuery] = useState('')
+const RecipesPage = observer(() => {
+  const store = useStore().recipesStore
+  const { updateQueryParams } = useRecipesSearchParams(store)
 
   useEffect(() => {
-    if (searchQuery) {
-      RecipeApi.findRecipeByName(searchQuery)
-        .then((response) => {
-          setRecipes(response.data)
-          setTotalPages(1)
-        })
-        .catch(console.error)
-    } else {
-      RecipeApi.getRecipes(currentPage)
-        .then((response) => {
-          setRecipes(response.data)
-          setTotalPages(response.meta.pagination.pageCount)
-        })
-        .catch(console.error)
-    }
-  }, [currentPage, searchQuery])
+    store.fetchCategories()
+  }, [store])
 
   const handleSearch = (value: string) => {
-    setSearchQuery(value)
-    setCurrentPage(1)
+    updateQueryParams({ search: value })
+  }
+
+  const handleFilter = (options: Option[]) => {
+    updateQueryParams({ categories: options })
   }
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
+    updateQueryParams({ page })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -60,23 +50,29 @@ const RecipesPage = () => {
           </div>
         </section>
         <section className={styles.searchSection}>
-          <Search onSearch={handleSearch} />
+          <Search
+            searchValue={store.searchQuery}
+            selectedOptions={store.selectedOptions}
+            options={store.categories}
+            onSearch={handleSearch}
+            onFilter={handleFilter}
+          />
         </section>
         <section className={styles.recipesSection}>
-          {recipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
-          ))}
+          {store.isLoading
+            ? Array.from({ length: 12 }).map((_, i) => <RecipeCardSkeleton key={i} />)
+            : store.recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)}
         </section>
       </div>
       <section className={styles.paginationSection}>
         <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
+          currentPage={store.currentPage}
+          totalPages={store.totalPages}
           handlePageChange={handlePageChange}
         />
       </section>
     </div>
   )
-}
+})
 
 export default RecipesPage

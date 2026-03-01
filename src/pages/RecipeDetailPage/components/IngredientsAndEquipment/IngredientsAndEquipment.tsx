@@ -1,4 +1,4 @@
-import type { Recipe } from '@/types/recipe'
+import type { Recipe } from '@/types/Recipe'
 import Text from '@/components/Text'
 import styles from './IngredientsAndEquipment.module.scss'
 import ingIcon from '@/assets/ing.svg'
@@ -16,7 +16,7 @@ const IngredientsAndEquipment: React.FC<IngredientsAndEquipmentProps> = ({ recip
           Ingredients
         </Text>
         <div className={styles.ingredientsGrid}>
-          {recipe.ingradients?.map((ingredient) => (
+          {recipe.ingredients?.map((ingredient) => (
             <div key={ingredient.id} className={styles.ingredient}>
               <img src={ingIcon} alt="ingredient" className={styles.icon} />
               <Text view="p-16">{`${ingredient.amount} ${ingredient.name}`}</Text>

@@ -1,10 +1,10 @@
 import Button from '@/components/Button'
-import { RecipeApi } from '@/api/recipe'
-import type { Recipe } from '@/types/recipe'
-import { useCallback, useState } from 'react'
+import type { Recipe } from '@/types/Recipe'
+import { observer } from 'mobx-react-lite'
 import { NavLink } from 'react-router'
 import TimerIcon from '@/components/icons/TimerIcon'
 import React from 'react'
+import { useStore } from '@/store/StoreContext'
 import Card from '../Card'
 
 export type RecipeCardProps = {
@@ -12,8 +12,9 @@ export type RecipeCardProps = {
   isFavorite?: boolean
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = React.memo(({ recipe, isFavorite = false }) => {
-  const [isFav, setIsFavorite] = useState(isFavorite)
+const RecipeCard: React.FC<RecipeCardProps> = observer(({ recipe }) => {
+  const { favorite: favoriteStore } = useStore()
+  const isFav = favoriteStore.isFavorite(recipe.documentId)
   const formats = recipe.images?.[0]?.formats
   const imageUrl =
     formats?.medium?.url ||
@@ -21,28 +22,18 @@ const RecipeCard: React.FC<RecipeCardProps> = React.memo(({ recipe, isFavorite =
     formats?.large?.url ||
     formats?.thumbnail?.url ||
     ''
-  const handleFavoriteClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation()
-      e.preventDefault()
 
-      const apiCall = isFav
-        ? RecipeApi.deleteRecipe(recipe.documentId)
-        : RecipeApi.saveRecipe(recipe.documentId)
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    favoriteStore.toggleFavorite(recipe.documentId)
+  }
 
-      apiCall
-        .then(() => {
-          setIsFavorite((prev) => !prev)
-        })
-        .catch((err) => console.error(err))
-    },
-    [isFav, recipe.documentId],
-  )
   return (
     <NavLink to={`/recipes/${recipe.documentId}`}>
       <Card
         title={recipe.name}
-        subtitle={recipe.ingradients?.map((i) => i.name).join(' + ') || ''}
+        subtitle={recipe.ingredients?.map((i) => i.name).join(' + ') || ''}
         image={imageUrl}
         captionSlot={
           <React.Fragment>

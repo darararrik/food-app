@@ -1,26 +1,50 @@
 import { axiosInstance } from './base'
-import type { Favorite, Recipe, StrapiResponse } from '../types/recipe'
+import type { RecipeDto } from '../types/Recipe'
+import type { StrapiResponse } from '@/types/StrapiResponse'
+import type { FavoriteDto } from '@/types/Favorite'
 export const RecipeApi = {
-  getRecipes: async (page = 1) => {
-    const response = await axiosInstance.get<StrapiResponse<Recipe[]>>('/recipes', {
-      params: {
-        populate: ['images', 'ingradients'],
-        pagination: {
-          page,
-          pageSize: 10,
-        },
+  getRecipes: async (page = 1, search = '', categories: string[] = []) => {
+    const params: any = {
+      populate: ['images', 'ingradients', 'category'],
+      pagination: {
+        page,
+        pageSize: 12,
       },
+    }
+
+    if (search) {
+      params.filters = {
+        ...params.filters,
+        name: {
+          $containsi: search,
+        },
+      }
+    }
+
+    if (categories.length > 0) {
+      params.filters = {
+        ...params.filters,
+        category: {
+          id: {
+            $in: categories.map(Number),
+          },
+        },
+      }
+    }
+
+    const response = await axiosInstance.get<StrapiResponse<RecipeDto[]>>('/recipes', {
+      params,
     })
     return response.data
   },
   getFavoriteRecipes: async (page = 1) => {
     try {
-      const res = await axiosInstance.get<Favorite[]>('/favorites', {
+      const res = await axiosInstance.get<FavoriteDto[]>('/favorites', {
         params: {
           populate: ['recipe'],
           pagination: {
             page,
-            pageSize: 10,
+            pageSize: 12,
           },
         },
       })
@@ -47,7 +71,7 @@ export const RecipeApi = {
   },
 
   getRecipeById: async (documentId: string) => {
-    const response = await axiosInstance.get<{ data: Recipe }>(`/recipes/${documentId}`, {
+    const response = await axiosInstance.get<{ data: RecipeDto }>(`/recipes/${documentId}`, {
       params: {
         populate: ['ingradients', 'equipments', 'directions.image', 'images', 'category'],
       },
@@ -63,7 +87,7 @@ export const RecipeApi = {
     return response.data
   },
   findRecipeByName: async (name: string) => {
-    const response = await axiosInstance.get<StrapiResponse<Recipe[]>>('/recipes', {
+    const response = await axiosInstance.get<StrapiResponse<RecipeDto[]>>('/recipes', {
       params: {
         populate: ['ingradients', 'equipments', 'directions.image', 'images', 'category'],
         filters: {
