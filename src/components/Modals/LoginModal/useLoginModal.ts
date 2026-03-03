@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useStore } from '@/store/StoreContext'
 
 export const useLoginModal = (onClose: () => void) => {
-  const { user: userStore } = useStore()
+  const { userStore: userStore } = useStore()
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

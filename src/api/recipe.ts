@@ -1,9 +1,15 @@
 import { axiosInstance } from './base'
-import type { RecipeDto } from '../types/Recipe'
+import { toModel, type RecipeDto } from '@/types/dto/RecipeDto'
+import type { FavoriteDto } from '@/types/dto/FavoriteDto'
 import type { StrapiResponse } from '@/types/StrapiResponse'
-import type { FavoriteDto } from '@/types/Favorite'
+import type { Recipe } from '@/types/models/Recipe'
+
 export const RecipeApi = {
-  getRecipes: async (page = 1, search = '', categories: string[] = []) => {
+  getRecipes: async (
+    page = 1,
+    search = '',
+    categories: string[] = [],
+  ): Promise<StrapiResponse<Recipe[]>> => {
     const params: any = {
       populate: ['images', 'ingradients', 'category'],
       pagination: {
@@ -32,12 +38,14 @@ export const RecipeApi = {
       }
     }
 
-    const response = await axiosInstance.get<StrapiResponse<RecipeDto[]>>('/recipes', {
-      params,
-    })
-    return response.data
+    const response = await axiosInstance.get<StrapiResponse<RecipeDto[]>>('/recipes', { params })
+    return {
+      data: response.data.data.map(toModel),
+      meta: response.data.meta,
+    }
   },
-  getFavoriteRecipes: async (page = 1) => {
+
+  getFavoriteRecipes: async (page = 1): Promise<Recipe[]> => {
     try {
       const res = await axiosInstance.get<FavoriteDto[]>('/favorites', {
         params: {
@@ -54,39 +62,43 @@ export const RecipeApi = {
       if (favorites && favorites.length > 0) {
         const promises = favorites.map(async (fav) => {
           if (fav.recipe?.documentId) {
-            const recipeInfo = await RecipeApi.getRecipeById(fav.recipe.documentId)
-            fav.recipe = recipeInfo.data
+            const recipeData = await RecipeApi.getRecipeById(fav.recipe.documentId)
+            return recipeData
           }
-          return fav
+          return null
         })
 
-        await Promise.all(promises)
+        const results = await Promise.all(promises)
+        return results.filter((r): r is Recipe => r !== null)
       }
 
-      return favorites
+      return []
     } catch (error) {
       console.error(error)
       return []
     }
   },
 
-  getRecipeById: async (documentId: string) => {
+  getRecipeById: async (documentId: string): Promise<Recipe> => {
     const response = await axiosInstance.get<{ data: RecipeDto }>(`/recipes/${documentId}`, {
       params: {
         populate: ['ingradients', 'equipments', 'directions.image', 'images', 'category'],
       },
     })
-    return response.data
+    return toModel(response.data.data)
   },
+
   saveRecipe: async (recipeId: string) => {
     const response = await axiosInstance.post('/favorites/add', { recipe: recipeId })
     return response.data
   },
+
   deleteRecipe: async (recipeId: string) => {
     const response = await axiosInstance.post(`/favorites/remove`, { recipe: recipeId })
     return response.data
   },
-  findRecipeByName: async (name: string) => {
+
+  findRecipeByName: async (name: string): Promise<StrapiResponse<Recipe[]>> => {
     const response = await axiosInstance.get<StrapiResponse<RecipeDto[]>>('/recipes', {
       params: {
         populate: ['ingradients', 'equipments', 'directions.image', 'images', 'category'],
@@ -97,6 +109,9 @@ export const RecipeApi = {
         },
       },
     })
-    return response.data
+    return {
+      data: response.data.data.map(toModel),
+      meta: response.data.meta,
+    }
   },
 }

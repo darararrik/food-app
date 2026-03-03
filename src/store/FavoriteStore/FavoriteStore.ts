@@ -1,16 +1,19 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { RecipeApi } from '@/api/recipe'
-import { toModel, type Recipe } from '@/types/Recipe'
+import type { Recipe } from '@/types/models/Recipe'
+import type { UserStore } from '@/store/UserStore/UserStore'
 
-type PrivateFields = '_favorites' | '_isLoading'
+type PrivateFields = '_favorites' | '_isLoading' | '_showLoginModal'
 
 export class FavoriteStore {
   private _favorites: Recipe[] = []
   private _isLoading = false
+  private _showLoginModal = false
+  private readonly _userStore: UserStore
 
-  constructor() {
+  constructor(userStore: UserStore) {
     makeAutoObservable<FavoriteStore, PrivateFields>(this)
-    console.log('FavoriteStore created')
+    this._userStore = userStore
   }
 
   get favorites(): Recipe[] {
@@ -21,12 +24,24 @@ export class FavoriteStore {
     return this._isLoading
   }
 
+  get showLoginModal(): boolean {
+    return this._showLoginModal
+  }
+
+  get isFavorite() {
+    return (recipeId: string) => this._favorites.some((fav) => fav.documentId === recipeId)
+  }
+
+  setShowLoginModal(value: boolean) {
+    this._showLoginModal = value
+  }
+
   async fetchFavorites() {
     this._isLoading = true
     try {
-      const response = await RecipeApi.getFavoriteRecipes()
+      const recipes = await RecipeApi.getFavoriteRecipes()
       runInAction(() => {
-        this._favorites = response.map((fav) => toModel(fav.recipe))
+        this._favorites = recipes
         this._isLoading = false
       })
     } catch (error) {
@@ -38,6 +53,11 @@ export class FavoriteStore {
   }
 
   async toggleFavorite(recipeId: string) {
+    if (!this._userStore.isAuthenticated) {
+      this._showLoginModal = true
+      return
+    }
+
     const isFavorite = this._favorites.some((fav) => fav.documentId === recipeId)
     try {
       if (isFavorite) {
@@ -47,14 +67,9 @@ export class FavoriteStore {
         })
       } else {
         await RecipeApi.saveRecipe(recipeId)
-        await this.fetchFavorites()
       }
     } catch (error) {
       console.error(error)
     }
-  }
-
-  get isFavorite() {
-    return (recipeId: string) => this._favorites.some((fav) => fav.documentId === recipeId)
   }
 }

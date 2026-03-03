@@ -1,11 +1,6 @@
 import { axiosInstance } from './base'
 import type { StrapiResponse } from '@/types/StrapiResponse'
-
-export interface CategoryDto {
-  id: number
-  documentId: string
-  title: string
-}
+import type { CategoryDto } from '@/types/dto/CategoryDto'
 
 export const CategoryApi = {
   getCategories: async () => {

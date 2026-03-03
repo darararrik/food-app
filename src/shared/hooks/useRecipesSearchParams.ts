@@ -1,18 +1,20 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router'
-import { RecipesStore } from '@/store/RecipeStore/RecipeStore'
+import { RecipeStore } from '@/store/RecipeStore/RecipeStore'
 import type { Option } from '@/components/MultiDropdown'
 
-export const useRecipesSearchParams = (store: RecipesStore) => {
+export const useRecipesSearchParams = (store: RecipeStore, categories: Option[]) => {
   const [searchParams, setSearchParams] = useSearchParams()
+  const lastParamsStr = useRef<string | null>(null)
 
   useEffect(() => {
+    const currentParamsStr = searchParams.toString()
     const query = searchParams.get('search') || ''
     const page = parseInt(searchParams.get('page') || '1', 10)
     const categoriesParams = searchParams.get('categories')
     const selectedCategories = categoriesParams
       ? categoriesParams.split(',').map((key) => {
-          const cat = store.categories.find((c) => c.key === key)
+          const cat = categories.find((c) => c.key === key)
           return { key, value: cat ? cat.value : key }
         })
       : []
@@ -21,8 +23,11 @@ export const useRecipesSearchParams = (store: RecipesStore) => {
     store.setCurrentPage(page)
     store.setSelectedOptions(selectedCategories)
 
-    store.fetchRecipes()
-  }, [searchParams, store, store.categories])
+    if (currentParamsStr !== lastParamsStr.current) {
+      store.fetchRecipes()
+      lastParamsStr.current = currentParamsStr
+    }
+  }, [searchParams, categories])
 
   const updateQueryParams = (params: { search?: string; page?: number; categories?: Option[] }) => {
     const newParams = new URLSearchParams(searchParams)

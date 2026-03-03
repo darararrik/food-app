@@ -12,12 +12,13 @@ import { useStore } from '@/store/StoreContext'
 import type { Option } from '@/components/MultiDropdown'
 
 const RecipesPage = observer(() => {
-  const store = useStore().recipesStore
-  const { updateQueryParams } = useRecipesSearchParams(store)
+  const { recipesStore: store, categoryStore } = useStore()
+  const { updateQueryParams } = useRecipesSearchParams(store, categoryStore.categories)
+  const { isLoading, recipes, searchQuery, selectedOptions, currentPage, totalPages } = store
 
   useEffect(() => {
-    store.fetchCategories()
-  }, [store])
+    categoryStore.fetchCategories()
+  }, [categoryStore])
 
   const handleSearch = (value: string) => {
     updateQueryParams({ search: value })
@@ -51,23 +52,24 @@ const RecipesPage = observer(() => {
         </section>
         <section className={styles.searchSection}>
           <Search
-            searchValue={store.searchQuery}
-            selectedOptions={store.selectedOptions}
-            options={store.categories}
+            searchValue={searchQuery}
+            selectedOptions={selectedOptions}
+            options={categoryStore.categories}
             onSearch={handleSearch}
             onFilter={handleFilter}
           />
         </section>
         <section className={styles.recipesSection}>
-          {store.isLoading
+          {isLoading
             ? Array.from({ length: 12 }).map((_, i) => <RecipeCardSkeleton key={i} />)
             : store.recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)}
         </section>
+        {recipes.length === 0 && <div className={styles.noRecipes}>Recipes not found</div>}
       </div>
       <section className={styles.paginationSection}>
         <Pagination
-          currentPage={store.currentPage}
-          totalPages={store.totalPages}
+          currentPage={currentPage}
+          totalPages={totalPages}
           handlePageChange={handlePageChange}
         />
       </section>

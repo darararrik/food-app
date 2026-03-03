@@ -8,11 +8,11 @@ import styles from './FavoritesPage.module.scss'
 import RecipeCardSkeleton from '@/components/Cards/RecipeCard/RecipeCardSkeleton'
 
 const FavoritesPage = observer(() => {
-  const { favorite: favoriteStore } = useStore()
+  const { favoriteStore: favoriteStore } = useStore()
 
   useEffect(() => {
     favoriteStore.fetchFavorites()
-  }, [favoriteStore])
+  }, [favoriteStore.fetchFavorites])
 
   if (favoriteStore.favorites === undefined || favoriteStore.favorites.length === 0) {
     return (

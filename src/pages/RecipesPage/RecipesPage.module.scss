@@ -68,3 +68,13 @@
   display: flex;
   justify-content: center;
 }
+
+.noRecipes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+  text-align: center;
+  @include mix.font-family();
+  font-size: 24px;
+}

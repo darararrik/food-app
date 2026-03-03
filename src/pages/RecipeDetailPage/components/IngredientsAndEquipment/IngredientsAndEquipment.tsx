@@ -1,4 +1,4 @@
-import type { Recipe } from '@/types/Recipe'
+import type { Recipe } from '@/types/models/Recipe'
 import Text from '@/components/Text'
 import styles from './IngredientsAndEquipment.module.scss'
 import ingIcon from '@/assets/ing.svg'

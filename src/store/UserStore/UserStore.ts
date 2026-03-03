@@ -10,7 +10,6 @@ export class UserStore {
 
   constructor() {
     makeAutoObservable<UserStore, PrivateFields>(this)
-    console.log('UserStore created')
   }
 
   get token(): string | null {
@@ -25,7 +24,7 @@ export class UserStore {
     return this._error
   }
 
-  get isAuthenticated() {
+  get isAuthenticated(): boolean {
     return !!this._token
   }
 

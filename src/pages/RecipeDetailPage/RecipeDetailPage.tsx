@@ -10,6 +10,7 @@ import HeroImage from './components/HeroImage'
 import IngredientsAndEquipment from './components/IngredientsAndEquipment'
 import Directions from './components/Directions/Directions'
 import parse from 'html-react-parser'
+import Loader from '@/components/Loader'
 
 const RecipeDetailPage = observer(() => {
   const navigate = useNavigate()
@@ -28,12 +29,22 @@ const RecipeDetailPage = observer(() => {
     if (id) {
       store.fetchRecipe(id)
     }
-  }, [id, store])
+  }, [id, store.fetchRecipe])
 
-  if (store.isLoading) return <div className={styles.loading}>Загрузка...</div>
+  if (store.isLoading)
+    return (
+      <div className={styles.loading}>
+        <Loader />
+      </div>
+    )
   const { recipe } = store
 
-  if (!recipe) return <div className={styles.error}>Рецепт не найден</div>
+  if (!recipe)
+    return (
+      <div className={styles.error}>
+        <Text>Recipe not found</Text>
+      </div>
+    )
 
   return (
     <div className={styles.main}>

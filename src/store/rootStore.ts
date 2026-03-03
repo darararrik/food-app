@@ -1,15 +1,18 @@
 import { UserStore } from './UserStore/UserStore'
 import { FavoriteStore } from './FavoriteStore/FavoriteStore'
-import { RecipesStore } from './RecipeStore/RecipeStore'
+import { RecipeStore } from './RecipeStore/RecipeStore'
+import { CategoryStore } from './CategoryStore/CategoryStore'
 
 export class RootStore {
-  user: UserStore
-  favorite: FavoriteStore
-  recipesStore: RecipesStore
+  userStore: UserStore
+  favoriteStore: FavoriteStore
+  recipesStore: RecipeStore
+  categoryStore: CategoryStore
 
   constructor() {
-    this.user = new UserStore()
-    this.favorite = new FavoriteStore()
-    this.recipesStore = new RecipesStore()
+    this.userStore = new UserStore()
+    this.favoriteStore = new FavoriteStore(this.userStore)
+    this.recipesStore = new RecipeStore()
+    this.categoryStore = new CategoryStore()
   }
 }

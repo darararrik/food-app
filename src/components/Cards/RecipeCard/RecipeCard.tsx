@@ -1,5 +1,5 @@
 import Button from '@/components/Button'
-import type { Recipe } from '@/types/Recipe'
+import type { Recipe } from '@/types/models/Recipe'
 import { observer } from 'mobx-react-lite'
 import { NavLink } from 'react-router'
 import TimerIcon from '@/components/icons/TimerIcon'
@@ -13,7 +13,7 @@ export type RecipeCardProps = {
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = observer(({ recipe }) => {
-  const { favorite: favoriteStore } = useStore()
+  const { favoriteStore: favoriteStore } = useStore()
   const isFav = favoriteStore.isFavorite(recipe.documentId)
   const formats = recipe.images?.[0]?.formats
   const imageUrl =

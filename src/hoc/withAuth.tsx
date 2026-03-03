@@ -7,7 +7,7 @@ export const withAuth = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ): React.FC<P> => {
   return observer((props: P) => {
-    const { user: userStore } = useStore()
+    const { userStore: userStore } = useStore()
 
     if (!userStore.isAuthenticated) {
       return <Navigate to="/" replace />

@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { RecipeApi } from '@/api/recipe'
-import { toModel, type Recipe } from '@/types/Recipe'
+import type { Recipe } from '@/types/models/Recipe'
 import type { ILocalStore } from '@/shared/hooks/useLocalStore'
 
 type PrivateFields = '_recipe' | '_isLoading'
@@ -11,7 +11,6 @@ export class RecipeDetailStore implements ILocalStore {
 
   constructor() {
     makeAutoObservable<RecipeDetailStore, PrivateFields>(this)
-    console.log('RecipeDetailStore created')
   }
 
   get recipe(): Recipe | null {
@@ -25,9 +24,9 @@ export class RecipeDetailStore implements ILocalStore {
   async fetchRecipe(id: string) {
     this._isLoading = true
     try {
-      const response = await RecipeApi.getRecipeById(id)
+      const recipe = await RecipeApi.getRecipeById(id)
       runInAction(() => {
-        this._recipe = toModel(response.data)
+        this._recipe = recipe
         this._isLoading = false
       })
     } catch (error) {
@@ -39,7 +38,6 @@ export class RecipeDetailStore implements ILocalStore {
   }
 
   destroy(): void {
-    console.log('RecipeDetailStore destroyed')
     this._recipe = null
   }
 }
