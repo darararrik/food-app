@@ -1,4 +1,4 @@
-export interface Ingradient {
+export interface IngredientDto {
   id: number
   name: string
   amount: number

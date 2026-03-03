@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { RecipeApi } from '@/api/recipe'
-import type { Recipe } from '@/types/recipe'
+import { observer } from 'mobx-react-lite'
+import { useLocalStore } from '@/shared/hooks/useLocalStore'
+import { RecipeDetailStore } from '../../store/RecipeDetailStore/RecipeDetailStore'
 import styles from './RecipeDetailPage.module.scss'
 import Text from '@/components/Text'
 import ArrowButton from '@/components/Pagination/components/ArrowButton'
@@ -9,11 +10,13 @@ import HeroImage from './components/HeroImage'
 import IngredientsAndEquipment from './components/IngredientsAndEquipment'
 import Directions from './components/Directions/Directions'
 import parse from 'html-react-parser'
+import Loader from '@/components/Loader'
 
-const RecipeDetailPage = () => {
+const RecipeDetailPage = observer(() => {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
-  const [recipe, setRecipe] = useState<Recipe | null>(null)
+  const store = useLocalStore(() => new RecipeDetailStore())
+
   const handleBack = () => {
     if (window.history.length > 1) {
       navigate(-1)
@@ -21,19 +24,27 @@ const RecipeDetailPage = () => {
       navigate('/', { replace: true })
     }
   }
+
   useEffect(() => {
     if (id) {
-      RecipeApi.getRecipeById(id)
-        .then((response) => {
-          setRecipe(response.data)
-        })
-        .catch((err) => {
-          console.log(err.message)
-        })
+      store.fetchRecipe(id)
     }
-  }, [id])
+  }, [id, store.fetchRecipe])
 
-  if (!recipe) return <div className={styles.error}>Рецепт не найден</div>
+  if (store.isLoading)
+    return (
+      <div className={styles.loading}>
+        <Loader />
+      </div>
+    )
+  const { recipe } = store
+
+  if (!recipe)
+    return (
+      <div className={styles.error}>
+        <Text>Recipe not found</Text>
+      </div>
+    )
 
   return (
     <div className={styles.main}>
@@ -53,6 +64,6 @@ const RecipeDetailPage = () => {
       </section>
     </div>
   )
-}
+})
 
 export default RecipeDetailPage

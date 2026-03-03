@@ -38,6 +38,9 @@
   padding-bottom: 20px;
   height: auto;
   margin-left: 40px;
+  @include mix.respond(lg) {
+    margin-left: 0;
+  }
 }
 
 .descriptionSection {
@@ -64,4 +67,14 @@
   margin-top: 64px;
   display: flex;
   justify-content: center;
+}
+
+.noRecipes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+  text-align: center;
+  @include mix.font-family();
+  font-size: 24px;
 }

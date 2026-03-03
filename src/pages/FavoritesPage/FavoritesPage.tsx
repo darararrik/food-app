@@ -1,25 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
 import { withAuth } from '@/hoc/withAuth'
-import { RecipeApi } from '@/api/recipe'
-import type { Recipe } from '@/types/recipe'
-import RecipeCard from '@/components/RecipeCard'
+import { useStore } from '@/store/StoreContext'
+import RecipeCard from '@/components/Cards/RecipeCard'
 import Text from '@/components/Text'
 import styles from './FavoritesPage.module.scss'
+import RecipeCardSkeleton from '@/components/Cards/RecipeCard/RecipeCardSkeleton'
 
-const FavoritesPage = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([])
+const FavoritesPage = observer(() => {
+  const { favoriteStore: favoriteStore } = useStore()
 
   useEffect(() => {
-    RecipeApi.getFavoriteRecipes(1)
-      .then((r) => {
-        setRecipes(r.map((favorite) => favorite.recipe))
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+    favoriteStore.fetchFavorites()
+  }, [favoriteStore.fetchFavorites])
 
-  if (recipes === undefined || recipes.length === 0) {
+  if (favoriteStore.favorites === undefined || favoriteStore.favorites.length === 0) {
     return (
       <div className={styles.empty}>
         <Text view="title">No favorites yet</Text>
@@ -31,11 +26,11 @@ const FavoritesPage = () => {
     <div className={styles.favoritesPage}>
       <Text view="title">Favorites</Text>
       <section className={styles.recipesSection}>
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} isFavorite />
-        ))}
+        {favoriteStore.isLoading
+          ? Array.from({ length: 12 }).map((_, i) => <RecipeCardSkeleton key={i} />)
+          : favoriteStore.favorites.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)}
       </section>
     </div>
   )
-}
+})
 export default withAuth(FavoritesPage)

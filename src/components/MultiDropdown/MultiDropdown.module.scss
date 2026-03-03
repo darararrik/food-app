@@ -1,9 +1,10 @@
 @use '@/shared/styles/variables' as *;
-
+@use '@/shared/styles/mixins' as mix;
 .multiDropdownWrapper {
   position: relative;
   display: inline-block;
   max-width: 100%;
+  @include mix.font-family(400);
 }
 
 .multiDropdownOptions {

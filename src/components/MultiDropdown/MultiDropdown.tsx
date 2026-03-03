@@ -70,7 +70,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
   }
 
   const filteredOptions = options.filter((option) =>
-    option.value.toLowerCase().includes(filter.toLowerCase()),
+    (option.value || '').toLowerCase().includes(filter.toLowerCase()),
   )
 
   const isEmpty = value.length === 0

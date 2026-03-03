@@ -1,21 +1,39 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
+import { observer } from 'mobx-react-lite'
+import { useStore } from '@/store/StoreContext'
 import styles from './Header.module.scss'
 import logo from '@/assets/logo.svg'
 import Text from '@/components/Text/Text'
 import NavText from '../NavText/NavText'
 import LoginModal from '@/components/Modals/LoginModal'
+import LogoutModal from '@/components/Modals/LogoutModal/LogoutModal'
 import CloseIcon from '@/components/icons/CloseIcon'
 import classNames from 'classnames'
 import MenuIcon from '@/components/icons/MenuIcon'
 import FavoriteIcon from '../icons/FavoriteIcon'
 import UserIcon from '../icons/UserIcon'
 
-const Header = () => {
+const Header = observer(() => {
+  const { userStore, favoriteStore } = useStore()
   const [isLoginModalOpen, setLoginModalOpen] = useState(false)
+  const [isLogoutModalOpen, setLogoutModalOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+
+  const handleUserClick = () => {
+    if (userStore.isAuthenticated) {
+      setLogoutModalOpen(true)
+    } else {
+      setLoginModalOpen(true)
+    }
+  }
+
+  const handleLoginModalClose = () => {
+    setLoginModalOpen(false)
+    favoriteStore.setShowLoginModal(false)
+  }
 
   return (
     <header className={styles.header}>
@@ -31,10 +49,14 @@ const Header = () => {
 
         <nav className={classNames(styles.nav, styles.desktopNav)}>
           <NavText to="/" text="Recipes" />
-          <NavText to="/favorites" text="Favorites" />
-          <NavText to="/products" text="Products" />
-          <NavText to="/menu-items" text="Menu Items" />
-          <NavText to="/planning" text="Planning" />
+          {userStore.isAuthenticated && (
+            <>
+              <NavText to="/favorites" text="Favorites" />
+              <NavText to="/products" text="Products" />
+              <NavText to="/menu-items" text="Menu Items" />
+              <NavText to="/planning" text="Planning" />
+            </>
+          )}
         </nav>
 
         <div className={classNames(styles.mobileMenu, { [styles.open]: isMenuOpen })}>
@@ -43,24 +65,40 @@ const Header = () => {
           </button>
           <nav className={styles.mobileNav}>
             <NavText to="/" text="Recipes" onClick={toggleMenu} />
-            <NavText to="/favorites" text="Favorites" onClick={toggleMenu} />
-            <NavText to="/products" text="Products" onClick={toggleMenu} />
-            <NavText to="/menu-items" text="Menu Items" onClick={toggleMenu} />
-            <NavText to="/planning" text="Planning" onClick={toggleMenu} />
+            {userStore.isAuthenticated && (
+              <>
+                <NavText to="/favorites" text="Favorites" onClick={toggleMenu} />
+                <NavText to="/products" text="Products" onClick={toggleMenu} />
+                <NavText to="/menu-items" text="Menu Items" onClick={toggleMenu} />
+                <NavText to="/planning" text="Planning" onClick={toggleMenu} />
+              </>
+            )}
           </nav>
         </div>
 
         <div className={styles.actions}>
-          <Link to="/favorites">
-            <FavoriteIcon width={20} height={20} />
-          </Link>
-          <div className={styles.actionIcon} onClick={() => setLoginModalOpen(true)}>
-            <UserIcon />
+          {userStore.isAuthenticated && (
+            <Link to="/favorites">
+              <FavoriteIcon width={20} height={20} />
+            </Link>
+          )}
+          <div className={styles.actionIcon} onClick={handleUserClick}>
+            <UserIcon color={userStore.isAuthenticated ? 'primary' : 'accent'} />
           </div>
         </div>
       </div>
-      <LoginModal isOpen={isLoginModalOpen} onClose={() => setLoginModalOpen(false)} />
+
+      <LoginModal
+        isOpen={isLoginModalOpen || favoriteStore.showLoginModal}
+        onClose={handleLoginModalClose}
+      />
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setLogoutModalOpen(false)}
+        onConfirm={() => userStore.logout()}
+      />
     </header>
   )
-}
+})
+
 export default Header

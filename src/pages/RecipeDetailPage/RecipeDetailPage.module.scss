@@ -34,7 +34,7 @@
   gap: 16px;
   align-items: center;
   margin-bottom: 37px;
-  flex-wrap: wrap; // prevents cutting off if title is long on mobile
+  flex-wrap: wrap;
 }
 
 .content {
@@ -61,4 +61,21 @@
   @include mix.respond(sm) {
     padding: 16px;
   }
+}
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: $brand-active-color;
+  font-size: 48px;
+  @include mix.font-family;
 }
